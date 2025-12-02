@@ -2,12 +2,12 @@
   "name": "selllite",
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "start": "node server/index.js",
     "dev": "nodemon server/index.js"
-  },
-  "engines": {
-    "node": "18.x"
   },
   "dependencies": {
     "express": "^4.18.2",
