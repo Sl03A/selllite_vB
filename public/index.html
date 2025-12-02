@@ -1,29 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SellLite — Boutique</title>
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <meta charset="UTF-8">
+  <title>SellLite – Boutique</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header class="topbar">
-    <a class="brand" href="/">SellLite</a>
-    <nav>
-      <a href="/">Boutique</a>
-      <a href="/admin/index.html">Admin</a>
-      <button id="btn-cart">Panier (<span id="cart-count">0</span>)</button>
-    </nav>
-  </header>
 
-  <main class="container">
-    <section class="catalog card">
-      <h1>Produits</h1>
-      <div id="products" class="grid"></div>
-    </section>
-  </main>
+<nav>
+  <div class="logo">SellLite</div>
+  <div>
+    <a href="index.html">Accueil</a>
+    <a href="products.html">Produits</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
 
-  <footer class="site-footer">© SellLite</footer>
-  <script src="/assets/js/main.js"></script>
+<section class="hero">
+  <h1>Vendez vos Produits Digitaux Instantanément</h1>
+  <p>Un système simple, rapide, sécurisé avec Paiements Stripe & Crypto.</p>
+</section>
+
+<section class="products" id="product-list">
+  <!-- injecté via JS si nécessaire -->
+</section>
+
+<footer>
+  © 2025 SellLite – Tous droits réservés.
+</footer>
+
+<script src="main.js"></script>
 </body>
 </html>
