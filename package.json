@@ -1,0 +1,7 @@
+{
+  "name":"selllite",
+  "version":"1.0.0",
+  "type":"module",
+  "scripts":{"start":"node server/index.js","dev":"nodemon server/index.js"},
+  "dependencies":{"express":"^4.18.2","stripe":"^11.0.0","coinbase-commerce-node":"^1.0.0","dotenv":"^16.0.0","better-sqlite3":"^8.0.0","bcrypt":"^5.1.0","express-session":"^1.17.3","connect-sqlite3":"^0.9.0"}
+}
