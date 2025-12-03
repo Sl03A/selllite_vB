@@ -1,19 +1,36 @@
-<nav class="nav">
-  <div class="left">
-    <a class="logo" href="/">
-      <!-- JS injectera le svg + text -->
-    </a>
-    <div style="margin-left:8px;color:var(--muted)">Marketplace</div>
-  </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil – SellLite</title>
 
-  <div class="links">
-    <a href="/">Accueil</a>
-    <a href="/products.html">Produits</a>
-    <a href="/admin/login.html">Admin</a>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/app.js" defer></script>
+</head>
 
-    <!-- theme toggle -->
-    <button class="theme-toggle" title="Basculer thème">
-      <span class="dot" aria-hidden="true"></span>
-    </button>
-  </div>
-</nav>
+<body>
+
+<header class="header">
+    <div class="logo">Sell<span>Lite</span></div>
+
+    <nav>
+        <a href="/index.html">Accueil</a>
+        <a href="/products.html">Produits</a>
+        <button id="toggle-mode" class="btn-mode">☀️</button>
+    </nav>
+</header>
+
+<section class="hero fade-in">
+    <h1>Bienvenue sur SellLite</h1>
+    <p>La plateforme simple et rapide pour vendre vos produits numériques.</p>
+</section>
+
+<section class="section">
+    <h2>Produits populaires</h2>
+
+    <!-- CONTENEUR DES PRODUITS -->
+    <div id="product-list" class="card-grid"></div>
+</section>
+
+</body>
+</html>
