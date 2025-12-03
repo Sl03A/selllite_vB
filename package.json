@@ -1,29 +1,22 @@
 {
-  "name": "selllite_pro",
+  "name": "selllite",
   "version": "1.0.0",
-  "description": "Selllite PRO - Shop digital avec Express + SQLite + Fake Payments",
   "type": "module",
-  "main": "server/index.js",
-
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "start": "node server/index.js",
     "dev": "nodemon server/index.js"
   },
-
   "dependencies": {
-    "bcrypt": "^5.1.0",
-    "better-sqlite3": "^8.0.0",
-    "connect-sqlite3": "^0.9.0",
-    "dotenv": "^16.4.0",
     "express": "^4.18.2",
-    "express-session": "^1.17.3"
-  },
-
-  "devDependencies": {
-    "nodemon": "^3.0.3"
-  },
-
-  "engines": {
-    "node": "18.x"
+    "stripe": "^11.0.0",
+    "coinbase-commerce-node": "^1.0.0",
+    "dotenv": "^16.0.0",
+    "better-sqlite3": "^8.0.0",
+    "bcrypt": "^5.1.0",
+    "express-session": "^1.17.3",
+    "connect-sqlite3": "^0.9.0"
   }
 }
