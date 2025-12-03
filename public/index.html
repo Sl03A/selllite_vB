@@ -1,40 +1,19 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SellLite Pro</title>
-<link rel="stylesheet" href="/assets/styles.css">
-</head>
-<body>
-<nav class="nav glass">
-  <div class="logo">SellLite Pro</div>
+<nav class="nav">
+  <div class="left">
+    <a class="logo" href="/">
+      <!-- JS injectera le svg + text -->
+    </a>
+    <div style="margin-left:8px;color:var(--muted)">Marketplace</div>
+  </div>
+
   <div class="links">
     <a href="/">Accueil</a>
     <a href="/products.html">Produits</a>
     <a href="/admin/login.html">Admin</a>
+
+    <!-- theme toggle -->
+    <button class="theme-toggle" title="Basculer thème">
+      <span class="dot" aria-hidden="true"></span>
+    </button>
   </div>
 </nav>
-
-<header class="hero">
-  <div class="hero-inner">
-    <h1 class="glow-text">Vendez vos produits numériques — simplement</h1>
-    <p class="sub">Dashboard, paiements et livraison automatique des clés.</p>
-    <a class="btn btn-primary" href="/products.html">Voir les produits</a>
-  </div>
-</header>
-
-<main class="container">
-  <section class="section">
-    <h2 class="section-title">Produits populaires</h2>
-    <div id="products" class="grid"></div>
-  </section>
-</main>
-
-<footer class="footer glass">
-  © 2025 SellLite Pro
-</footer>
-
-<script src="/assets/app.js"></script>
-</body>
-</html>
