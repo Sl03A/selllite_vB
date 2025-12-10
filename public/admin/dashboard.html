@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - Dashboard</title><link rel="stylesheet" href="/assets/styles.css"></head><body>
+<main class="container"><h1>Dashboard</h1><div id="stats"></div><a href="/admin/products.html">Retour</a></main>
+<script>
+async function load(){ const res = await fetch('/api/admin/dashboard'); if(!res.ok) return; const d = await res.json(); document.getElementById('stats').innerHTML = `<div>Total products: ${d.totalProducts}</div><div>Total orders: ${d.totalOrders}</div><div>Revenue: ${(d.revenue/100).toFixed(2)} €</div>`; }
+document.addEventListener('DOMContentLoaded', load);
+</script>
+</body></html>
