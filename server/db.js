@@ -1,14 +1,23 @@
-import Database from 'better-sqlite3';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import Database from "better-sqlite3";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DB_PATH = path.join(__dirname, 'database.sqlite');
-const db = new Database(DB_PATH);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Run migrations
-const initSql = fs.readFileSync(path.join(__dirname,'migrations','init.sql'), 'utf8');
-db.exec(initSql);
+// ====== Ensure /server/database exists ======
+const dbFolder = path.join(__dirname, "database");
+
+if (!fs.existsSync(dbFolder)) {
+  fs.mkdirSync(dbFolder, { recursive: true });
+  console.log("📁 Dossier database créé automatiquement.");
+}
+
+// ====== Open SQLite database ======
+const dbPath = path.join(dbFolder, "main.db");
+const db = new Database(dbPath);
+
+console.log("✅ Base SQLite chargée :", dbPath);
 
 export default db;
