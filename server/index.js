@@ -1,44 +1,68 @@
-import express from 'express';
-import session from 'express-session';
-import SQLiteStoreFactory from 'connect-sqlite3';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import cors from 'cors';
-import morgan from 'morgan';
+import express from "express";
+import session from "express-session";
+import BetterSqliteStore from "better-sqlite3-session-store";
+import path from "path";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { fileURLToPath } from "url";
 
-import db from './db.js';
-import productRouter from './routes/products.js';
-import adminRouter from './routes/admin.js';
-import cartRouter from './routes/cart.js';
-import paymentsRouter from './routes/payments.js';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(morgan('dev'));
+// Fix pour __dirname sous ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Middlewares
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "../public")));
 
-app.use(session({
-  store: SQLiteStoreFactory({ db: 'sessions.sqlite', dir: path.join(__dirname) }),
-  secret: process.env.SESSION_SECRET || 'change_me',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 7*24*3600*1000 }
-}));
+// Session store SQLite moderne
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "supersecret",
+    resave: false,
+    saveUninitialized: false,
+    store: new BetterSqliteStore({
+      client: "better-sqlite3",
+      expired: {
+        clear: true,
+        intervalMs: 900000, // 15 min auto cleanup
+      },
+      path: "./database/sessions.db",
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 jours
+    },
+  })
+);
 
-// serve static
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// === Routes ===
 
-// routers
-app.use('/api/products', productRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/cart', cartRouter);
-app.use('/api/payments', paymentsRouter);
+// Page d'accueil
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
-// fallback
-app.get('/', (req,res)=> res.sendFile(path.join(__dirname,'..','public','index.html')));
+// Exemple login admin
+app.post("/api/admin/login", (req, res) => {
+  const { username, password } = req.body;
 
-const port = process.env.PORT || 3000;
-app.listen(port, ()=> console.log('SellLite v3 running on port', port));
+  if (username === "admin" && password === "admin123") {
+    req.session.admin = true;
+    return res.json({ success: true });
+  }
+
+  res.json({ success: false, message: "Invalid credentials" });
+});
+
+// Vérification session
+app.get("/api/admin/check", (req, res) => {
+  res.json({ admin: !!req.session.admin });
+});
+
+// Démarre le serveur
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on port ${PORT}`)
+);
