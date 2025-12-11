@@ -1,104 +1,50 @@
 import express from "express";
 import session from "express-session";
-import Database from "better-sqlite3";
-import path from "path";
-import bodyParser from "body-parser";
+import SQLiteStoreFactory from "connect-sqlite3";
 import cors from "cors";
+import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
+import Database from "better-sqlite3";
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Fix __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const app = express();
 
-// Database
-const db = new Database("./database/main.db");
+// ====== CREATE DATABASE FOLDER IF MISSING ======
+const dbFolder = path.join(__dirname, "database");
+if (!fs.existsSync(dbFolder)) {
+  fs.mkdirSync(dbFolder, { recursive: true });
+  console.log("📁 Dossier database créé automatiquement.");
+}
 
-// Create sessions table if not exists
-db.prepare(`
-  CREATE TABLE IF NOT EXISTS sessions (
-    sid TEXT PRIMARY KEY,
-    sess TEXT NOT NULL,
-    expire INTEGER NOT NULL
-  )
-`).run();
+// ====== INIT BETTER-SQLITE3 ======
+const dbPath = path.join(dbFolder, "main.db");
+const db = new Database(dbPath);
+console.log("✅ Base SQLite chargée :", dbPath);
 
-// Custom SQLite session store
-const SQLiteStore = {
-  get: (sid, cb) => {
-    try {
-      const row = db
-        .prepare("SELECT sess FROM sessions WHERE sid = ? AND expire > ?")
-        .get(sid, Date.now());
-      cb(null, row ? JSON.parse(row.sess) : null);
-    } catch (err) {
-      cb(err);
-    }
-  },
-
-  set: (sid, sess, cb) => {
-    try {
-      const expire = Date.now() + 86400000;
-      db.prepare(`
-        INSERT INTO sessions (sid, sess, expire)
-        VALUES (?, ?, ?)
-        ON CONFLICT(sid) DO UPDATE SET sess=excluded.sess, expire=excluded.expire
-      `).run(sid, JSON.stringify(sess), expire);
-      cb(null);
-    } catch (err) {
-      cb(err);
-    }
-  },
-
-  destroy: (sid, cb) => {
-    try {
-      db.prepare("DELETE FROM sessions WHERE sid = ?").run(sid);
-      cb(null);
-    } catch (err) {
-      cb(err);
-    }
-  }
-};
-
-// Middlewares
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "../public")));
-
+// ====== SESSION STORE FIXED ======
+const SQLiteStore = SQLiteStoreFactory(session);
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "supersecret",
+    store: new SQLiteStore({
+      dir: dbFolder,
+      db: "sessions.db",
+    }),
+    secret: "mysecret",
     resave: false,
     saveUninitialized: false,
-    store: SQLiteStore,
-    cookie: { maxAge: 86400000 } // 24h
   })
 );
 
-// Test route admin login
-app.post("/api/admin/login", (req, res) => {
-    const { username, password } = req.body;
+// ====== MIDDLEWARE ======
+app.use(cors());
+app.use(express.json());
 
-    if (username === "admin" && password === "admin123") {
-        req.session.admin = true;
-        return res.json({ success: true });
-    }
+// ====== ROUTES ======
+import productsRouter from "./routes/products.js";
+app.use("/api/products", productsRouter);
 
-    return res.status(401).json({ success: false, error: "Invalid credentials" });
-});
-
-app.get("/api/admin/check", (req, res) => {
-    res.json({ admin: !!req.session.admin });
-});
-
-// Serve frontend
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-
-// Start server
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on port ${PORT}`)
-);
+// ====== START SERVER ======
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log("🚀 Server running on port", PORT));
