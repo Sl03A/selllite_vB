@@ -12,19 +12,12 @@ services:
           property: connectionString
       - key: SECRET_KEY
         sync: false
+    plan: free
 
-  - type: web
+  - type: static
     name: frontend
-    env: node
-    rootDir: frontend
-    buildCommand: |
-      npm install
-      npm run build
-      npm install -g serve
-    startCommand: serve -s dist -l 10001
-    envVars:
-      - key: NODE_ENV
-        value: production
+    buildCommand: cd frontend && npm install && npm run build
+    publishPath: frontend/dist
 
 databases:
   - name: saasdb
