@@ -1,0 +1,29 @@
+
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = "FastAPI backend for futuristic SaaS (complete)"
+authors = ["You <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.95"
+uvicorn = {extras=["standard"], version="^0.22.0"}
+SQLAlchemy = "^2.0"
+asyncpg = "^0.28"
+python-jose = "^3.3.0"
+passlib = "^1.7.4"
+python-dotenv = "^1.0.0"
+alembic = "^1.11.1"
+psycopg2-binary = "^2.9"
+stripe = "^5.0.0"
+httpx = "^0.24.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0"
+pytest-asyncio = "^0.21.0"
+httpx = "^0.24.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

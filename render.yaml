@@ -1,0 +1,29 @@
+
+services:
+  - type: web
+    name: my-futuristic-saas-backend
+    env: python
+    plan: starter
+    repo: <YOUR_GIT_REPO_URL>
+    branch: main
+    buildCommand: cd backend && poetry install --no-root --no-dev
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        scope: RUN_AND_BUILD
+      - key: DATABASE_URL
+        scope: RUN_AND_BUILD
+
+  - type: web
+    name: my-futuristic-saas-frontend
+    env: static
+    plan: starter
+    repo: <YOUR_GIT_REPO_URL>
+    branch: main
+    buildCommand: cd frontend && npm ci && npm run build
+    publishPath: frontend/dist
+
+databases:
+  - name: my-futuristic-saas-db
+    engine: postgres
+    plan: starter
