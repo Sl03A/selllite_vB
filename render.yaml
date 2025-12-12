@@ -14,10 +14,13 @@ services:
         sync: false
     plan: free
 
-  - type: static
+  - type: web
     name: frontend
-    buildCommand: cd frontend && npm install && npm run build
-    publishPath: frontend/dist
+    env: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s dist -l 10001
+    plan: free
 
 databases:
   - name: saasdb
